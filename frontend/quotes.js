@@ -89,7 +89,7 @@ const postData = async (e) => {
 const displayFeedback = async (res) => {
   const response = await res.text();
   feedbackMessage.textContent = response;
-  // console.log(response);
+  setTimeout(() => (feedbackMessage.innerHTML = ""), 3000);
 };
 
 // submitBtn.addEventListener("click", postData);
