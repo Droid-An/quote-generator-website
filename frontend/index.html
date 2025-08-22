@@ -17,11 +17,12 @@
       <input id = "auto-play" type="checkbox" name = On/Off>
     </div>
 
-    <form>
+    <form action="http://127.0.0.1:3000">
       <label for="addQuoteForm">Add quote</label>
-      <input id="addQuoteForm" type="text" name="newQuote">
-
-      <input type="submit">
+      <input id="addQuoteForm" type="text" name="newQuote" required>
+      <label for="addAuthorForm">Add author</label>
+      <input id="addAuthorForm" type="text" name="newAuthor" required>
+      <button id = "submitBtn" type="submit">Submit</button>
     </form>
     <footer>
       <p id="auto-play-state"></p>

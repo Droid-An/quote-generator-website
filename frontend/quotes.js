@@ -19,6 +19,8 @@ async function showNewQuote() {
   quoteAuthorP.innerText = `- ${quoteProperty.author}`;
 }
 
+///two versions of autoplay function, delete one
+
 // function autoPlay() {
 //   if (checkbox.checked == true) {
 //     const timerId = setInterval(showNewQuote, 6000);
@@ -29,12 +31,11 @@ async function showNewQuote() {
 //   }
 // }
 
-let timerId = null; // declare in outer scope
+let timerId = null;
 
 function autoPlay() {
   if (checkbox.checked) {
     if (!timerId) {
-      // prevent multiple intervals stacking
       timerId = setInterval(showNewQuote, 600);
       autoPlayState.innerText = "auto-play: ON";
     }
@@ -42,7 +43,6 @@ function autoPlay() {
     clearInterval(timerId);
     timerId = null;
     autoPlayState.innerText = "auto-play: OFF";
-    autoPlayState.style.display = "none";
   }
 }
 
@@ -54,3 +54,23 @@ function pickFromArray(choices) {
 }
 
 showNewQuote();
+
+// ---- Form submission ----
+const submitBtn = document.querySelector("#submitBtn");
+const inputNewQuote = document.querySelector("#addQuoteForm");
+const inputNewAuthor = document.querySelector("#addAuthorForm");
+console.log(inputNewQuote.value);
+const postData = async (e) => {
+  e.preventDefault();
+  const res = await fetch("http://127.0.0.1:3000", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      quote: inputNewQuote.value,
+      author: inputNewAuthor.value,
+    }),
+  });
+  // inputNewQuote.value = "";
+};
+
+submitBtn.addEventListener("click", postData);
