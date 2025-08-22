@@ -3,11 +3,16 @@
 const button = document.getElementById("new-quote");
 const checkbox = document.getElementById("auto-play");
 const autoPlayState = document.getElementById("auto-play-state");
+const quoteContent = document.querySelector("#quoteContent");
 
 async function fetchQuote() {
-  const response = await fetch("http://127.0.0.1:3000");
-  const quoteProperty = await response.json();
-  return quoteProperty;
+  try {
+    const response = await fetch("http://127.0.0.1:3000");
+    const quoteProperty = await response.json();
+    return quoteProperty;
+  } catch (err) {
+    quoteContent.innerText = err;
+  }
 }
 
 async function showNewQuote() {
@@ -57,20 +62,35 @@ showNewQuote();
 
 // ---- Form submission ----
 const submitBtn = document.querySelector("#submitBtn");
-const inputNewQuote = document.querySelector("#addQuoteForm");
-const inputNewAuthor = document.querySelector("#addAuthorForm");
-console.log(inputNewQuote.value);
+const inputNewQuote = document.querySelector("#addQuote");
+const inputNewAuthor = document.querySelector("#addAuthor");
+const feedbackMessage = document.querySelector("#feedbackMessage");
+const form = document.querySelector("form");
+
 const postData = async (e) => {
   e.preventDefault();
-  const res = await fetch("http://127.0.0.1:3000", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      quote: inputNewQuote.value,
-      author: inputNewAuthor.value,
-    }),
-  });
-  // inputNewQuote.value = "";
+  try {
+    const res = await fetch("http://127.0.0.1:3000", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        quote: inputNewQuote.value,
+        author: inputNewAuthor.value,
+      }),
+    });
+    // inputNewQuote.value = "";
+    displayFeedback(res);
+  } catch (err) {
+    console.error(err);
+    feedbackMessage.textContent = err;
+  }
 };
 
-submitBtn.addEventListener("click", postData);
+const displayFeedback = async (res) => {
+  const response = await res.text();
+  feedbackMessage.textContent = response;
+  // console.log(response);
+};
+
+// submitBtn.addEventListener("click", postData);
+form.addEventListener("submit", postData);

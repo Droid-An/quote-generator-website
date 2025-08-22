@@ -57,7 +57,7 @@ app.post("/", (req, res) => {
       quote: body.quote,
       author: body.author,
     });
-    res.send("ok");
+    res.send("quote added successfully");
   });
 });
 
