@@ -69,17 +69,25 @@ const form = document.querySelector("form");
 
 const postData = async (e) => {
   e.preventDefault();
+
+  const quote = inputNewQuote.value.trim();
+  const author = inputNewAuthor.value.trim();
+
+  if (!quote || !author) {
+    feedbackMessage.textContent = "Both quote and author are required.";
+    setTimeout(() => (feedbackMessage.textContent = ""), 5000);
+    return;
+  }
+
   try {
     const res = await fetch("http://127.0.0.1:3000", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        quote: inputNewQuote.value,
-        author: inputNewAuthor.value,
-      }),
+      body: JSON.stringify({ quote, author }),
     });
-    // inputNewQuote.value = "";
     displayFeedback(res);
+    inputNewQuote.value = "";
+    inputNewAuthor.value = "";
   } catch (err) {
     console.error(err);
     feedbackMessage.textContent = err;
