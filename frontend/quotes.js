@@ -7,7 +7,7 @@ const quoteContent = document.querySelector("#quoteContent");
 
 async function fetchQuote() {
   try {
-    const response = await fetch("http://127.0.0.1:3000");
+    const response = await fetch("https://droid-an-quote-website-server-backend.hosting.codeyourfuture.io");
     const quoteProperty = await response.json();
     return quoteProperty;
   } catch (err) {
