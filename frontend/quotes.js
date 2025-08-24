@@ -5,9 +5,12 @@ const checkbox = document.getElementById("auto-play");
 const autoPlayState = document.getElementById("auto-play-state");
 const quoteContent = document.querySelector("#quoteContent");
 
+const backendUrl =
+  "https://droid-an-quote-website-server-backend.hosting.codeyourfuture.io";
+
 async function fetchQuote() {
   try {
-    const response = await fetch("https://droid-an-quote-website-server-backend.hosting.codeyourfuture.io");
+    const response = await fetch(backendUrl);
     const quoteProperty = await response.json();
     return quoteProperty;
   } catch (err) {
@@ -80,7 +83,7 @@ const postData = async (e) => {
   }
 
   try {
-    const res = await fetch("https://droid-an-quote-website-server-backend.hosting.codeyourfuture.io", {
+    const res = await fetch(backendUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ quote, author }),
