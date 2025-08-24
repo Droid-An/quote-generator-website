@@ -3,11 +3,16 @@
 const button = document.getElementById("new-quote");
 const checkbox = document.getElementById("auto-play");
 const autoPlayState = document.getElementById("auto-play-state");
+const quoteContent = document.querySelector("#quoteContent");
 
 async function fetchQuote() {
-  const response = await fetch("https://droid-an-quote-website-server-backend.hosting.codeyourfuture.io");
-  const quoteProperty = await response.json();
-  return quoteProperty;
+  try {
+    const response = await fetch("https://droid-an-quote-website-server-backend.hosting.codeyourfuture.io");
+    const quoteProperty = await response.json();
+    return quoteProperty;
+  } catch (err) {
+    quoteContent.innerText = err;
+  }
 }
 
 async function showNewQuote() {
@@ -19,6 +24,8 @@ async function showNewQuote() {
   quoteAuthorP.innerText = `- ${quoteProperty.author}`;
 }
 
+///two versions of autoplay function, delete one
+
 // function autoPlay() {
 //   if (checkbox.checked == true) {
 //     const timerId = setInterval(showNewQuote, 6000);
@@ -29,12 +36,11 @@ async function showNewQuote() {
 //   }
 // }
 
-let timerId = null; // declare in outer scope
+let timerId = null;
 
 function autoPlay() {
   if (checkbox.checked) {
     if (!timerId) {
-      // prevent multiple intervals stacking
       timerId = setInterval(showNewQuote, 600);
       autoPlayState.innerText = "auto-play: ON";
     }
@@ -42,7 +48,6 @@ function autoPlay() {
     clearInterval(timerId);
     timerId = null;
     autoPlayState.innerText = "auto-play: OFF";
-    autoPlayState.style.display = "none";
   }
 }
 
@@ -54,3 +59,46 @@ function pickFromArray(choices) {
 }
 
 showNewQuote();
+
+// ---- Form submission ----
+const submitBtn = document.querySelector("#submitBtn");
+const inputNewQuote = document.querySelector("#addQuote");
+const inputNewAuthor = document.querySelector("#addAuthor");
+const feedbackMessage = document.querySelector("#feedbackMessage");
+const form = document.querySelector("form");
+
+const postData = async (e) => {
+  e.preventDefault();
+
+  const quote = inputNewQuote.value.trim();
+  const author = inputNewAuthor.value.trim();
+
+  if (!quote || !author) {
+    feedbackMessage.textContent = "Both quote and author are required.";
+    setTimeout(() => (feedbackMessage.textContent = ""), 5000);
+    return;
+  }
+
+  try {
+    const res = await fetch("http://127.0.0.1:3000", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ quote, author }),
+    });
+    displayFeedback(res);
+    inputNewQuote.value = "";
+    inputNewAuthor.value = "";
+  } catch (err) {
+    console.error(err);
+    feedbackMessage.textContent = err;
+  }
+};
+
+const displayFeedback = async (res) => {
+  const response = await res.text();
+  feedbackMessage.textContent = response;
+  setTimeout(() => (feedbackMessage.innerHTML = ""), 3000);
+};
+
+// submitBtn.addEventListener("click", postData);
+form.addEventListener("submit", postData);

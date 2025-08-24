@@ -24,8 +24,6 @@ function randomQuote() {
 
 app.get("/", (req, res) => {
   const quote = randomQuote();
-  //   res.send(`"${quote.quote}" -${quote.author}`);
-  // res.send(`{author:${quote.author}, quote:${quote.quote}`);
   res.send({ author: quote.author, quote: quote.quote });
 });
 
@@ -57,11 +55,10 @@ app.post("/", (req, res) => {
       quote: body.quote,
       author: body.author,
     });
-    res.send("ok");
+    res.send("Quote has been added successfully");
   });
 });
 
 app.listen(port, () => {
   console.error(`Quote server listening on port ${port}`);
 });
-``;
