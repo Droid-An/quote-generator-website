@@ -80,7 +80,7 @@ const postData = async (e) => {
   }
 
   try {
-    const res = await fetch("http://127.0.0.1:3000", {
+    const res = await fetch("https://droid-an-quote-website-server-backend.hosting.codeyourfuture.io", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ quote, author }),
